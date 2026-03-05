@@ -69,9 +69,9 @@ router.post('/send', auth, async (req, res) => {
       const fee       = parseFloat((parseFloat(amount) * 0.005).toFixed(4));
       const netAmount = parseFloat((parseFloat(amount) - fee).toFixed(2));
       const timestamp = new Date().toISOString();
-      const hash      = generateHash(
+         const hash      = generateHash(
         txnId, sender.id, receiver.id,
-        amount, timestamp, previousHash
+        parseFloat(amount), timestamp, previousHash
       );
 
       // Save transaction
@@ -168,9 +168,9 @@ router.get('/verify/:hash', async (req, res) => {
     if (!txn)
       return res.status(404).json({ verified: false, error: 'Hash not found' });
 
-    const recomputed = generateHash(
+const recomputed = generateHash(
       txn.id, txn.sender_wallet, txn.receiver_wallet,
-      txn.amount, new Date(txn.initiated_at).toISOString(),
+      parseFloat(txn.amount), new Date(txn.initiated_at).toISOString(),
       txn.previous_hash
     );
 
